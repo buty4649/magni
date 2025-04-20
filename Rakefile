@@ -1,0 +1,28 @@
+if (mruby_dir = ENV.fetch('MRUBY_DIR', nil))
+  unless File.exist?(File.join(mruby_dir, 'Rakefile'))
+    raise "MRUBY_DIR is set to #{mruby_dir}, but #{mruby_dir}/Rakefile does not exist"
+  end
+else
+  mruby_dir = File.join(__dir__, 'mruby')
+  unless File.exist?(File.join(mruby_dir, 'Rakefile'))
+    print 'Do you want to clone mruby? [Y/n]: '
+    answer = $stdin.gets.chomp
+    answer = 'Y' if answer.empty?
+
+    raise 'mruby is required but not found' unless answer =~ /^[Yy]/
+
+    puts 'Cloning mruby...'
+    system("git clone https://github.com/mruby/mruby.git #{mruby_dir}")
+    raise 'Failed to clone mruby' unless File.exist?(File.join(mruby_dir, 'Rakefile'))
+
+  end
+end
+
+ENV['MRUBY_CONFIG'] = File.join(__dir__, 'build_config.rb')
+ENV['MRUBY_BUILD_DIR'] = File.join(__dir__, 'build')
+load File.join(mruby_dir, 'Rakefile')
+
+desc 'run all tests with valgrind memory check'
+task 'test:memcheck' => 'test:build' do
+  sh 'valgrind --leak-check=full --error-exitcode=1 ./build/host/bin/mrbtest'
+end

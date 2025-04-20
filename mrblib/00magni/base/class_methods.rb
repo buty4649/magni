@@ -1,0 +1,129 @@
+class Magni
+  module Base
+    module ClassMethods
+      include Base::Dispatcher
+
+      def inherited(subclass)
+        super
+        @@subclass = subclass # rubocop:disable Style/ClassVars
+      end
+
+      def subclass
+        @@subclass
+      end
+
+      def current
+        @@current ||= subclass.new # rubocop:disable Style/ClassVars
+      end
+
+      def current=(klass)
+        @@current = klass # rubocop:disable Style/ClassVars
+      end
+
+      def desc(usage, description)
+        @usage = usage
+        @description = description
+      end
+
+      attr_reader :options
+
+      def commands
+        @commands ||= { help: help_command }
+      end
+
+      def option(name, options = {})
+        @options ||= []
+        @options << Option.build(name, options)
+      end
+
+      def class_options
+        @class_options ||= []
+      end
+
+      def class_option(name, options = {})
+        class_options << Option.build(name, options)
+      end
+
+      def default_command(meth = nil)
+        if meth
+          @default_command = meth.is_a?(Symbol) ? meth : meth.to_sym
+        else
+          @default_command ||= :help
+        end
+      end
+
+      def default_command?(meth)
+        @default_command == meth
+      end
+
+      def package_name(name = nil)
+        if name
+          @package_name = name
+        else
+          @package_name
+        end
+      end
+
+      def no_commands
+        return unless block_given?
+
+        @no_commands = true
+        yield
+        @no_commands = false
+      end
+
+      def help_text
+        text = usage
+
+        if using_default? || current_command.name == :help
+          text << "\nCommands:\n"
+          commands.keys.sort.each do |name|
+            is_default = default_command != :help && default_command?(name)
+            description = commands[name].description
+
+            text += format("  %-10<name>s %<description>s%<is_default>s\n", name:, description:, is_default:)
+          end
+        end
+
+        text
+      end
+
+      def usage
+        return '' unless package_name
+
+        usage = "Usage:\n"
+        usage << "  #{package_name}"
+
+        if using_default? && current_command.name == :help
+          usage << ' [command]'
+        elsif current_command.usage
+          usage << " #{current_command.usage}"
+        end
+
+        "#{usage}\n"
+      end
+
+      def start(argv = ARGV)
+        dispatch(argv.dup)
+      end
+
+      protected
+
+      def method_added(meth)
+        super
+
+        return if @no_commands || meth == :initialize || is_a?(Magni)
+
+        commands[meth] = Command.new(meth, @usage, @description, options)
+
+        @usage = nil
+        @description = nil
+        @options = []
+      end
+
+      def help_command
+        Command.new(:help, 'help', 'show this message', nil)
+      end
+    end
+  end
+end

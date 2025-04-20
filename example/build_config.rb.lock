@@ -1,0 +1,12 @@
+---
+mruby:
+  version: 3.4.0
+  release_no: 30400
+  git_commit: 9c6349c769a5102fb71f7eea9a87a402ecf5f85d
+builds:
+  host:
+    https://github.com/buty4649/mruby-tiny-optparse.git:
+      url: https://github.com/buty4649/mruby-tiny-optparse.git
+      branch: main
+      commit: d830f49a9323c5d0eba55a1b21a07fd367293355
+      version: 0.1.0

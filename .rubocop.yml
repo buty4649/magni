@@ -1,0 +1,30 @@
+# template for mruby -->
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable
+  Exclude:
+    - "**/mruby/**/*"
+    - "build/**/*"
+
+Style/CollectionQuerying:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "test/**/*.rb"
+# <-- end
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/MethodLength:
+  Max: 30

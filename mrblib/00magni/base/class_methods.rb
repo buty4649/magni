@@ -96,7 +96,7 @@ class Magni
         usage = "Usage:\n"
         usage << "  #{package_name}"
 
-        if using_default? && current_command.name == :help
+        if using_default? || current_command.name == :help
           usage << ' [command]'
         elsif current_command.usage
           usage << " #{current_command.usage}"

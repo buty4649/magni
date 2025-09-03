@@ -63,6 +63,7 @@ class Magni
           @package_name
         end
       end
+      alias app_name package_name
 
       def no_commands
         return unless block_given?

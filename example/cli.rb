@@ -1,7 +1,7 @@
 class Cli < Magni
   class_option :banner, desc: 'banner', type: :string
   default_command :hello
-  package_name 'magni'
+  app_name 'magni-example'
 
   desc 'hello', 'say hello'
   option :desc, aliases: :d, default: 'desc', type: :string, desc: 'description', banner: 'string'

@@ -29,7 +29,7 @@ end
 
 desc 'copy magni to current directory'
 task 'copy:magni' do
-  FileUtils.cp(File.join(ENV.fetch('MRUBY_BUILD_DIR', nil), 'host', 'bin', 'magni'), '.')
+  FileUtils.cp(File.join(ENV.fetch('MRUBY_BUILD_DIR', nil), 'host', 'bin', 'magni-example'), '.')
 end
 
 task 'build' => 'copy:magni'

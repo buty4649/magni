@@ -78,10 +78,11 @@ class Magni
         if using_default? || current_command.name == :help
           text << "\nCommands:\n"
           commands.keys.sort.each do |name|
-            is_default = default_command != :help && default_command?(name)
             description = commands[name].description
+            is_default = default_command != :help && default_command?(name)
+            suffix = is_default ? ' (default)' : ''
 
-            text += format("  %-10<name>s %<description>s%<is_default>s\n", name:, description:, is_default:)
+            text += format("  %-10<name>s %<description>s%<suffix>s\n", name:, description:, suffix:)
           end
         end
 

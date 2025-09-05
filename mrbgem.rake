@@ -12,11 +12,6 @@ MRuby::Gem::Specification.new('magni') do |spec|
                     File.join(config_dir, 'mrblib', '**', '*.rb')
                   ].grep_v(/build_config.rb$/)
 
-  unless spec.build.defines.include?('MAGNI_NO_ENTRYPOINT')
-    # Set the directory name containing build_config.rb to bin
-    spec.bins = [File.basename(File.absolute_path(config_dir))]
-  end
-
   spec.add_dependency('mruby-exit', core: 'mruby-exit')
   spec.add_dependency('mruby-io', core: 'mruby-io')
   spec.add_dependency('mruby-kernel-ext', core: 'mruby-kernel-ext')
@@ -26,4 +21,25 @@ MRuby::Gem::Specification.new('magni') do |spec|
 
   spec.add_test_dependency('mruby-struct', core: 'mruby-struct')
   spec.add_test_dependency('mruby-test-stub', github: 'buty4649/mruby-test-stub', branch: 'main')
+
+  build_config_initializer = spec.build_config_initializer
+  spec.build_config_initializer = Proc.new do
+    instance_eval(&build_config_initializer)
+
+    if spec.bins.empty? && !spec.build.defines.include?('MAGNI_NO_ENTRYPOINT')
+      # Set the directory name containing build_config.rb to bin
+      spec.bins << File.basename(File.absolute_path(config_dir))
+    end
+
+    spec.bins.each do |bin|
+      objname = spec.build.objfile(bin.pathmap("#{spec.build_dir}/tools/#{spec.bins.first}/%n"))
+      entrypoint = "#{spec.dir}/templates/entrypoint.c"
+      exe = spec.build.exefile("#{build.build_dir}/bin/#{bin}")
+
+      file exe => objname
+      file objname => entrypoint do
+        spec.build.cc.run objname, entrypoint
+      end
+    end
+  end
 end

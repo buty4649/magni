@@ -24,7 +24,7 @@ MRuby::Gem::Specification.new('magni') do |spec|
 
   build_config_initializer = spec.build_config_initializer
   spec.build_config_initializer = Proc.new do
-    instance_eval(&build_config_initializer)
+    instance_eval(&build_config_initializer) if build_config_initializer
 
     if spec.bins.empty? && !spec.build.defines.include?('MAGNI_NO_ENTRYPOINT')
       # Set the directory name containing build_config.rb to bin

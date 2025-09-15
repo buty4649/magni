@@ -1,54 +1,63 @@
+EN | [JP](./README_ja.md)
+
+---
+
 # Magni
 
-Magniは、強力なCLIツールをmrubyで構築するためのフレームワークです。
+Magni is a framework for developing CLI tools with mruby. It includes the necessary files for building CLI tools with mruby, allowing you to build CLI tools with minimal configuration. It also provides an API similar to [Thor](https://github.com/rails/thor), a well-known CLI framework for CRuby, so if you have experience with that tool, you can develop efficiently.
 
-このプロジェクトは、CRubyの有名なCLIフレームワークであるThorにインスパイアされています。
+## Features
+- Lightweight CLI framework running on mruby
+- [Thor](https://github.com/rails/thor)-like API
+- Includes code necessary for building CLI tools
 
-## 特徴
-- mruby上で動作する軽量なCLIフレームワーク
-- コマンドやオプションの定義が簡単
-- Thorライクな記法
-- C言語のエントリーポイント(main関数)が含まれており、CLIに必要な定義が既に実装済み
+## Quick Start
 
-## クイックスタート
+### 1. Prepare Compiler
+A C compiler is required to build mruby. See the [official mruby guide](https://github.com/mruby/mruby/blob/master/doc/guides/compile.md) for details.
 
-### 1. コンパイラの準備
-mrubyのビルドにはCコンパイラが必要です。詳細は[mruby公式ガイド](https://github.com/mruby/mruby/blob/master/doc/guides/compile.md)を参照してください。
+### 2. Create Project Directory
+Create a project directory with any directory name.
+This directory name will be the executable file name after build by default.
 
-### 2. プロジェクトディレクトリの作成
-任意のディレクトリ名でプロジェクト用ディレクトリを作成します。
-このディレクトリ名がデフォルトでビルド後の実行ファイル名になります。
-例:
 ```sh
 mkdir mycli
 cd mycli
 ```
 
-### 3. mrubyのソースコードを取得
-以下のいずれかの方法でmrubyのソースコードを取得します。
+### 3. Get mruby Source Code
+Get the mruby source code using one of the following methods.
 
-#### (A) git cloneで取得
+#### (A) Get with git clone
 ```sh
 git clone https://github.com/mruby/mruby.git
+
+# or git submodule (recommended)
+git submodule add https://github.com/mruby/mruby.git
 ```
 
-#### (B) 公式サイトからダウンロード
-[mruby公式ダウンロードページ](https://mruby.org/downloads/) からアーカイブをダウンロードし、展開してください。
+#### (B) Download from Official Site
+Download and extract the archive from the [official mruby download page](https://mruby.org/downloads/).
 
-### 4. build_config.rbの作成
-プロジェクトルートに `build_config.rb` を作成し、Magniのgemを追加します。
-例:
+### 4. Create build\_config.rb
+Create `build_config.rb` in the project root and add the Magni gem.
+
 ```ruby
+# build_config.rb
 MRuby::Build.new do |conf|
   conf.toolchain
   conf.gembox 'default'
-  conf.gem 'magni', github: 'buty4649/magni', branch: 'main'
+  conf.gem github: 'buty4649/magni', branch: 'main'
+  conf.build_dir File.join(__dir__, 'build')
 end
 ```
 
-### 5. CLIスクリプト(cli.rb)の作成
-例:
+### 5. Create Script
+Create a script. The name is arbitrary, but here we use *cli.rb* as an example.
+The script must define one class that inherits from the Magni class (here we use the Cli class).
+
 ```ruby
+# cli.rb
 class Cli < Magni
   package_name 'mycli'
 
@@ -59,9 +68,55 @@ class Cli < Magni
 end
 ```
 
-### 6. ビルドとバイナリ生成
-プロジェクトルートで以下を実行:
+### 6. Build and Binary Generation
+Execute the following in the project root.
 ```sh
-
+rake -f mruby/Rakefile
 ```
-`./build/host/bin/mycli` というバイナリが生成されます（ディレクトリ名が `mycli` の場合）。
+
+A binary named `./build/bin/mycli` will be generated (if the directory name is `mycli`).
+
+```sh
+$ ./build/bin/mycli
+Usage:
+  mycli [command]
+
+Commands:
+  hello      say hello
+  help       show this message
+
+Options:
+  -h, --help                        show this message and exit
+```
+
+## Tips
+
+### Change Binary File Name
+You can change the output binary file name by specifying **bins** when loading magni as follows. In the following example, it is changed to *awesome-cli-tool*.
+
+```ruby
+MRuby::Build.new do |conf|
+-- snip --
+  conf.gem github: 'buty4649/magni', branch: 'main' do |g|
+    g.bins = %w[awesome-cli-tool]
+  end
+
+-- snip --
+end
+```
+
+### Split Scripts / Load Multiple Files
+
+In mruby, `require` / `require_relative` cannot be used by default. However, all script files are loaded and built at build time. The files to be built are as follows:
+
+* `./*.rb`
+* `./app/**/*.rb`
+* `./lib/**/*.rb`
+* `./mrblib/**/*.rb`
+
+> [!TIP]
+> These paths are relative paths based on the directory where `build_config.rb` is located.
+
+## LICENSE
+
+See the [LICENSE](LICENSE) file for details.

@@ -11,7 +11,7 @@ class Magni
       @desc = options[:desc]
       @required = options[:required] || false
       @type = options[:type] || :string
-      @banner = options[:banner] || (@type.to_s if @type != :boolean)
+      @banner = (options[:banner] || @type.to_s) if @type != :boolean
       @enum = [options[:enum]].flatten.compact
       @repeatable = options[:repeatable]
 
@@ -26,9 +26,11 @@ class Magni
       new(name, options)
     end
 
-    def self.flag(name, suffix = nil)
+    def self.flag(name, type = nil, suffix = nil)
       flag = if name.length == 1
                "-#{name}"
+             elsif type == :boolean
+               "--[no-]#{name}"
              else
                "--#{name}"
              end

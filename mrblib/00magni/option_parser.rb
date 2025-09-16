@@ -2,7 +2,8 @@ class Magni
   class OptionParser
     def initialize(command, specs, klass)
       @parser = ::OptionParser.new
-      @validator = OptionValidator.new(klass, specs)
+      @specs = specs
+      @validator = OptionValidator.new(klass, @specs)
 
       build(command, specs, klass)
     end
@@ -22,6 +23,8 @@ class Magni
             klass.options[opt.name] = v
           end
         end
+
+        klass.options[opt.name] = opt.default if opt.default
       end
 
       @parser.on('-h', '--help', 'show this message and exit') do

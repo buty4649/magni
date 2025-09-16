@@ -6,11 +6,11 @@ class Magni
 
     def initialize(name, options = {})
       @name = name
+      @type = options[:type] || :string
       @aliases = [options[:aliases] || options[:alias]].flatten.compact
-      @default = options[:default]
+      @default = options[:default] || (true if @type == :boolean)
       @desc = options[:desc]
       @required = options[:required] || false
-      @type = options[:type] || :string
       @banner = (options[:banner] || @type.to_s) if @type != :boolean
       @enum = [options[:enum]].flatten.compact
       @repeatable = options[:repeatable]

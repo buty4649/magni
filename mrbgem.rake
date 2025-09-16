@@ -2,7 +2,7 @@ MRuby::Gem::Specification.new('magni') do |spec|
   spec.license = 'MIT'
   spec.author  = 'buty4649'
   spec.summary = 'A CLI framework for building powerful tools with mruby'
-  spec.version = '1.1.0'
+  spec.version = '1.1.1'
 
   config_dir = File.dirname(MRuby::Build.mruby_config_path)
   spec.rbfiles += Dir[

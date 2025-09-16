@@ -43,7 +43,7 @@ class Magni
 
     def flags(opt)
       flag = opt.aliases.map { |a| Option.flag(a.to_s) }
-      flag << Option.flag(opt.name.to_s, opt.banner)
+      flag << Option.flag(opt.name.to_s, opt.type, opt.banner)
 
       flag
     end

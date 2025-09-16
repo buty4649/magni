@@ -42,10 +42,13 @@ end
 assert('Magni::Option.flag') do
   assert_equal '-f', Magni::Option.flag('f')
   assert_equal '--foo', Magni::Option.flag('foo')
-  assert_equal '--foo=VAL', Magni::Option.flag('foo', '=VAL')
-  assert_equal '--foo [VAL]', Magni::Option.flag('foo', '[VAL]')
-  assert_equal '--foo[=VAL]', Magni::Option.flag('foo', '[=VAL]')
-  assert_equal '--foo =VAL', Magni::Option.flag('foo', ' =VAL')
+  assert_equal '-f', Magni::Option.flag('f')
+  assert_equal '--[no-]foo', Magni::Option.flag('foo', :boolean)
+  assert_equal '--foo', Magni::Option.flag('foo', :string)
+  assert_equal '--foo=VAL', Magni::Option.flag('foo', :string, '=VAL')
+  assert_equal '--foo [VAL]', Magni::Option.flag('foo', :string, '[VAL]')
+  assert_equal '--foo[=VAL]', Magni::Option.flag('foo', :string, '[=VAL]')
+  assert_equal '--foo =VAL', Magni::Option.flag('foo', :string, ' =VAL')
 end
 
 assert('Magni::Option#validate raises on invalid type') do

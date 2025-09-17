@@ -2,7 +2,7 @@ class Magni
   class Option
     attr_reader :name, :aliases, :banner, :default, :desc, :required, :type, :enum, :repeatable
 
-    VALID_TYPES = %i[string numeric boolean].freeze
+    VALID_TYPES = %i[string numeric boolean flag].freeze
 
     def initialize(name, options = {})
       @name = name
@@ -11,7 +11,7 @@ class Magni
       @default = options[:default] || (true if @type == :boolean)
       @desc = options[:desc]
       @required = options[:required] || false
-      @banner = (options[:banner] || @type.to_s) if @type != :boolean
+      @banner = (options[:banner] || @type.to_s) unless %i[boolean flag].include?(type)
       @enum = [options[:enum]].flatten.compact
       @repeatable = options[:repeatable]
 

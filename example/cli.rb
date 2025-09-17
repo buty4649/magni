@@ -6,10 +6,12 @@ class Cli < Magni
   desc 'hello', 'say hello'
   option :desc, aliases: :d, default: 'desc', type: :string, desc: 'description', banner: 'string'
   option :color, aliases: :c, type: :boolean
+  option :underline, aliases: :u, type: :flag
   def hello(message)
     puts options[:banner] if options[:banner]
 
     print "\e[31m" if options[:color]
+    print "\e[4m" if options[:underline]
     puts "hello #{message}"
     puts "desc: #{options[:desc]}" if options[:desc]
     print "\e[m" if options[:color]

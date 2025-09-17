@@ -27,12 +27,13 @@ class Magni
     end
 
     def self.flag(name, type = nil, suffix = nil)
+      n = name.to_s.gsub('_', '-')
       flag = if name.length == 1
-               "-#{name}"
+               "-#{n}"
              elsif type == :boolean
-               "--[no-]#{name}"
+               "--[no-]#{n}"
              else
-               "--#{name}"
+               "--#{n}"
              end
 
       if suffix

@@ -6,6 +6,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mruby_version: ['3.4.0', 'master']
+
+    env:
+      MRUBY_VERSION: ${{ matrix.mruby_version }}
 
     steps:
     - uses: actions/checkout@v5
@@ -26,3 +32,5 @@ jobs:
 
     - name: Run tests
       run: bundle exec rake test
+      env:
+        MRUBY_VERSION: ${{ matrix.mruby_version }}

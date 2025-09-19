@@ -1,4 +1,4 @@
-EN | [JP](./README_ja.md)
+EN | [JA](./README_ja.md)
 
 ---
 

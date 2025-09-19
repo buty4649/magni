@@ -18,7 +18,6 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version-file: '.ruby-version'
         bundler-cache: true
 
     - name: Install dependencies

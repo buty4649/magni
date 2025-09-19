@@ -5,31 +5,31 @@ class Magni
       @specs = specs
       @validator = OptionValidator.new(klass, @specs)
 
-      build(command, specs, klass)
-    end
-
-    def build(command, specs, klass)
-      specs.each do |opt|
-        o = flags(opt)
-        o << opt.desc if opt.desc
-
-        @parser.on(*o) do |value|
-          v = parse_value(opt, value)
-
-          if opt.repeatable
-            klass.options[opt.name] ||= []
-            klass.options[opt.name] << v
-          else
-            klass.options[opt.name] = v
-          end
-        end
-
-        klass.options[opt.name] = opt.default if opt.default
+      @specs.each do |spec|
+        build(spec, klass)
       end
 
       @parser.on('-h', '--help', 'show this message and exit') do
         klass.help(command)
       end
+    end
+
+    def build(spec, klass)
+      o = flags(spec)
+      o << spec.desc if spec.desc
+
+      @parser.on(*o) do |value|
+        v = parse_value(spec, value)
+
+        if opt.repeatable
+          klass.options[spec.name] ||= []
+          klass.options[spec.name] << v
+        else
+          klass.options[spec.name] = v
+        end
+      end
+
+      klass.options[spec.name] = spec.default if spec.default
     end
 
     def help

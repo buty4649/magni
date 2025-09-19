@@ -1,6 +1,7 @@
 assert('Magni::Base::ClassMethods.desc sets usage and description') do
   klass = Class.new do
     extend Magni::Base::ClassMethods
+
     def self.usage_val = @usage
     def self.description_val = @description
   end
@@ -28,6 +29,7 @@ end
 assert('Magni::Base::ClassMethods.default_command sets and gets default command') do
   klass = Class.new do
     extend Magni::Base::ClassMethods
+
     def self.default_command_val = @default_command
   end
   klass.default_command(:foo)
@@ -56,6 +58,7 @@ end
 assert('Magni::Base::ClassMethods.help_text includes usage and commands') do
   klass = Class.new do
     extend Magni::Base::ClassMethods
+
     def self.using_default? = true
     def self.current_command = Struct.new(:name).new(:help)
     def self.package_name = 'magni-test'

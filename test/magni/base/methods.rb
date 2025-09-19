@@ -1,6 +1,7 @@
 assert('Magni::Base::Methods#invoke_command calls the method') do
   klass = Class.new do
     include Magni::Base::Methods
+
     def foo(x, y) # rubocop:disable Naming/MethodParameterName
       x + y
     end
@@ -14,6 +15,7 @@ end
 assert('Magni::Base::Methods#invoke_command raises CommandArgumentError on wrong args') do
   klass = Class.new do
     include Magni::Base::Methods
+
     def foo(_); end
   end
   obj = klass.new
@@ -31,6 +33,7 @@ assert('Magni::Base::Methods#help') do
   assert('outputs help and exits (no commands)') do
     klass = Class.new do
       include Magni::Base::Methods
+
       def self.commands = { help: Struct.new(:name, :description).new(:help, 'show this message') }
       def self.help_text = 'helptext'
       def self.current_command = Struct.new(:help).new('optionhelp')
@@ -50,6 +53,7 @@ assert('Magni::Base::Methods#help') do
   assert('outputs helptext and command list when commands exist') do
     klass = Class.new do
       include Magni::Base::Methods
+
       def self.commands
         {
           foo: Struct.new(:name, :description).new(:foo, 'desc foo'),

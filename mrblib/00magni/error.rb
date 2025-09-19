@@ -25,6 +25,12 @@ class Magni
     end
   end
 
+  class OptionAttributeInvalidError < Error
+    def initialize(opt, attr)
+      super("Error: #{opt} #{attr} is invalid")
+    end
+  end
+
   class InvalidFormatError < Error; end
 
   class InvalidOptionError < Error

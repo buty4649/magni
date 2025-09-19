@@ -122,3 +122,47 @@ assert('Magni::Option#validate raises on invalid type') do
   end
   assert_true err
 end
+
+assert('Magni::Option.build with valid options') do
+  opt = Magni::Option.build('test', type: :string, desc: 'test option')
+  assert_equal 'test', opt.name
+  assert_equal :string, opt.type
+  assert_equal 'test option', opt.desc
+end
+
+assert('Magni::Option.build raises on invalid attribute') do
+  assert_raise(Magni::OptionAttributeInvalidError) do
+    Magni::Option.build('test', invalid_attr: 'value')
+  end
+end
+
+assert('Magni::Option.build raises on multiple invalid attributes') do
+  assert_raise(Magni::OptionAttributeInvalidError) do
+    Magni::Option.build('test', bad_attr: 'value', another_bad: 'value2')
+  end
+end
+
+assert('Magni::Option.build accepts all valid attributes') do
+  opt = Magni::Option.build('test', {
+                              aliases: :t,
+                              banner: 'BANNER',
+                              default: 'default_val',
+                              desc: 'description',
+                              display_name: 'display',
+                              required: true,
+                              type: :string,
+                              enum: %w[a b],
+                              repeatable: false
+                            })
+
+  assert_equal 'test', opt.name
+  assert_equal ['t'], opt.aliases
+  assert_equal 'BANNER', opt.banner
+  assert_equal 'default_val', opt.default
+  assert_equal 'description', opt.desc
+  assert_equal 'display', opt.display_name
+  assert_true opt.required
+  assert_equal :string, opt.type
+  assert_equal %w[a b], opt.enum
+  assert_false opt.repeatable
+end

@@ -1,6 +1,7 @@
 class Magni
   class Option
-    attr_reader :name, :aliases, :banner, :default, :desc, :display_name, :required, :type, :enum, :repeatable
+    VALID_ATTRS = %i[name aliases banner default desc display_name required type enum repeatable].freeze
+    attr_reader(*VALID_ATTRS)
 
     VALID_TYPES = %i[string numeric boolean flag].freeze
 
@@ -24,6 +25,10 @@ class Magni
     end
 
     def self.build(name, options = {})
+      options.keys.each do |key| # rubocop: disable Performance/HashEachMethods
+        raise OptionAttributeInvalidError.new(name, key) unless VALID_ATTRS.include?(key)
+      end
+
       new(name, options)
     end
 

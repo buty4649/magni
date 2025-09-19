@@ -6,12 +6,12 @@ class Magni
     VALID_TYPES = %i[string numeric boolean flag].freeze
 
     def initialize(name, options = {})
-      @name = name
+      @name = name.to_s
       @type = options[:type] || :string
       @aliases = [options[:aliases]].flatten.compact.map(&:to_s)
-      @default = options[:default] || (true if @type == :boolean)
+      @default = options[:default]
       @desc = options[:desc]
-      @display_name = options[:display_name]
+      @display_name = options[:display_name]&.to_s
       @required = options[:required]
       @banner = options[:banner] || @type.to_s unless %i[boolean flag].include?(type)
       @enum = [options[:enum]].flatten.compact
@@ -38,7 +38,7 @@ class Magni
 
     def flags(suffix: true)
       flags = aliases.map { |a| to_flag(a, false) }
-      flags << to_flag(name, suffix)
+      flags << flag(suffix:)
 
       flags
     end

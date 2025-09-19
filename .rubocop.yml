@@ -5,6 +5,7 @@ AllCops:
   Exclude:
     - "**/mruby/**/*"
     - "build/**/*"
+    - "vendor/**/*"
 
 Style/CollectionQuerying:
   Enabled: false

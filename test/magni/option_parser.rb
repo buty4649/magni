@@ -64,12 +64,9 @@ assert('Magni::OptionParser#parse_value handles non-numeric types') do
   assert_equal 'test_value', result
 end
 
-assert('Magni::OptionParser#flags generates correct flags') do
-  command = Struct.new(:name).new('test')
-  parser = Magni::OptionParser.new(command, [], Class.new)
-
+assert('Magni::Option#flags generates correct flags') do
   opt = Magni::Option.new('verbose', type: :boolean, aliases: ['v'])
-  flags = parser.flags(opt)
+  flags = opt.flags
 
   assert_true flags.is_a?(Array)
   assert_true flags.length >= 2

@@ -12,7 +12,7 @@ class Magni
 
     def validate_required?
       required.each do |opt|
-        raise RequiredOptionError, Option.flag(opt.name.to_s) unless @klass.options[opt.name]
+        raise RequiredOptionError, opt.flag(suffix: false) unless @klass.options[opt.name]
       end
 
       true
@@ -33,7 +33,7 @@ class Magni
 
       return true unless invalid
 
-      raise InvalidOptionError.new(Option.flag(invalid.name.to_s), invalid.enum)
+      raise InvalidOptionError.new(invalid.flag(suffix: false), invalid.enum)
     end
 
     def enums

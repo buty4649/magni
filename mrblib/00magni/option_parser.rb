@@ -15,13 +15,13 @@ class Magni
     end
 
     def build(spec, klass)
-      o = flags(spec)
+      o = spec.flags
       o << spec.desc if spec.desc
 
       @parser.on(*o) do |value|
         v = parse_value(spec, value)
 
-        if opt.repeatable
+        if spec.repeatable
           klass.options[spec.name] ||= []
           klass.options[spec.name] << v
         else
@@ -42,13 +42,6 @@ class Magni
       @validator.validate
 
       argv
-    end
-
-    def flags(opt)
-      flag = opt.aliases.map { |a| Option.flag(a.to_s) }
-      flag << Option.flag(opt.name.to_s, opt.type, opt.banner)
-
-      flag
     end
 
     def parse_value(opt, value)

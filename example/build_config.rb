@@ -6,7 +6,7 @@ MRuby::Build.new do |conf|
   conf.gem core: 'mruby-sprintf'
   conf.gem core: 'mruby-exit'
   conf.gem '../' do |g|
-    g.bins << "magni-example"
+    g.bins << 'magni-example'
   end
 
   conf.enable_debug

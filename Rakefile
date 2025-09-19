@@ -5,21 +5,32 @@ if (mruby_dir = ENV.fetch('MRUBY_DIR', nil))
 else
   mruby_dir = File.join(__dir__, 'mruby')
   unless File.exist?(File.join(mruby_dir, 'Rakefile'))
-    print 'Do you want to clone mruby? [Y/n]: '
-    answer = $stdin.gets.chomp
-    answer = 'Y' if answer.empty?
+    unless ENV['CI']
+      print 'Do you want to clone mruby? [Y/n]: '
+      answer = gets.chomp
+      answer = 'Y' if answer.empty?
 
-    raise 'mruby is required but not found' unless answer =~ /^[Yy]/
+      raise 'mruby is required but not found' unless answer =~ /^[Yy]/
+    end
 
-    puts 'Cloning mruby...'
-    system("git clone https://github.com/mruby/mruby.git #{mruby_dir}")
+    mruby_version = ENV.fetch('MRUBY_VERSION', 'master')
+    if mruby_version =~ /^\d+\.\d+\.\d+$/
+      puts "Download mruby #{mruby_version}..."
+      system("wget https://github.com/mruby/mruby/archive/#{mruby_version}.zip -O mruby.zip")
+      system('unzip mruby.zip')
+      system("mv mruby-#{mruby_version} #{mruby_dir}")
+      File.delete('mruby.zip')
+    else
+      puts 'Cloning mruby...'
+      system("git clone https://github.com/mruby/mruby.git #{mruby_dir}")
+    end
     raise 'Failed to clone mruby' unless File.exist?(File.join(mruby_dir, 'Rakefile'))
 
   end
 end
 
-ENV['MRUBY_CONFIG'] = File.join(__dir__, 'build_config.rb')
-ENV['MRUBY_BUILD_DIR'] = File.join(__dir__, 'build')
+ENV['MRUBY_CONFIG'] = ENV['MRUBY_CONFIG'] || File.join(__dir__, 'build_config.rb')
+ENV['MRUBY_BUILD_DIR'] = ENV['MRUBY_BUILD_DIR'] || File.join(__dir__, 'build')
 load File.join(mruby_dir, 'Rakefile')
 
 desc 'run all tests with valgrind memory check'

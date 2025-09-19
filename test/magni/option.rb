@@ -26,7 +26,7 @@ assert('Magni::Option#initialize with defaults') do
   assert_equal [], opt.aliases
   assert_nil opt.default
   assert_nil opt.desc
-  assert_false opt.required
+  assert_nil opt.required
   assert_equal :string, opt.type
   assert_equal 'string', opt.banner
   assert_equal [], opt.enum

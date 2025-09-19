@@ -7,11 +7,11 @@ class Magni
     def initialize(name, options = {})
       @name = name
       @type = options[:type] || :string
-      @aliases = [options[:aliases] || options[:alias]].flatten.compact
+      @aliases = [options[:aliases]].flatten.compact
       @default = options[:default] || (true if @type == :boolean)
       @desc = options[:desc]
-      @required = options[:required] || false
-      @banner = (options[:banner] || @type.to_s) unless %i[boolean flag].include?(type)
+      @required = options[:required]
+      @banner = options[:banner] || @type.to_s unless %i[boolean flag].include?(type)
       @enum = [options[:enum]].flatten.compact
       @repeatable = options[:repeatable]
 
@@ -27,14 +27,7 @@ class Magni
     end
 
     def self.flag(name, type = nil, suffix = nil)
-      n = name.to_s.gsub('_', '-')
-      flag = if name.length == 1
-               "-#{n}"
-             elsif type == :boolean
-               "--[no-]#{n}"
-             else
-               "--#{n}"
-             end
+      flag = name_to_flag(name, type)
 
       if suffix
         flag << if suffix.start_with?('=') || suffix.start_with?(' ') || suffix.start_with?('[=')
@@ -45,6 +38,17 @@ class Magni
       end
 
       flag
+    end
+
+    def self.name_to_flag(name, type)
+      n = name.to_s.gsub('_', '-')
+      if name.length == 1
+        "-#{n}"
+      elsif type == :boolean
+        "--[no-]#{n}"
+      else
+        "--#{n}"
+      end
     end
   end
 end

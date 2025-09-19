@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mruby_version: ['3.4.0', 'master']
+
+    env:
+      MRUBY_VERSION: ${{ matrix.mruby_version }}
+
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        submodules: recursive
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version-file: '.ruby-version'
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: bundle install
+
+    - name: Run RuboCop
+      run: bundle exec rubocop
+
+    - name: Run tests
+      run: bundle exec rake test
+      env:
+        MRUBY_VERSION: ${{ matrix.mruby_version }}

@@ -1,4 +1,4 @@
-MRuby::Gem::Specification.new('magni') do |spec|
+MRuby::Gem::Specification.new('magni') do |spec| # rubocop: disable Metrics/BlockLength
   spec.license = 'MIT'
   spec.author  = 'buty4649'
   spec.summary = 'A CLI framework for building powerful tools with mruby'
@@ -23,7 +23,7 @@ MRuby::Gem::Specification.new('magni') do |spec|
   spec.add_test_dependency('mruby-test-stub', github: 'buty4649/mruby-test-stub', branch: 'main')
 
   build_config_initializer = spec.build_config_initializer
-  spec.build_config_initializer = Proc.new do
+  spec.build_config_initializer = proc do
     instance_eval(&build_config_initializer) if build_config_initializer
 
     if spec.bins.empty? && !spec.build.defines.include?('MAGNI_NO_ENTRYPOINT')

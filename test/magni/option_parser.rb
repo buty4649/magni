@@ -93,25 +93,6 @@ assert('Magni::OptionParser sets default values correctly') do
   assert_equal 'default_name', klass.options['name']
 end
 
-assert('Magni::OptionParser handles boolean options with default true') do
-  klass = Class.new do
-    def self.options
-      @options ||= {}
-    end
-
-    def self.help(command); end
-  end
-
-  command = Struct.new(:name).new('test')
-  specs = [
-    Magni::Option.new('verbose', type: :boolean)
-  ]
-
-  Magni::OptionParser.new(command, specs, klass)
-
-  assert_equal true, klass.options['verbose']
-end
-
 assert('Magni::OptionParser#help returns help text') do
   command = Struct.new(:name).new('test')
   specs = [

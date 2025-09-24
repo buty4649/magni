@@ -15,7 +15,7 @@ assert('Magni::Base::ClassMethods.option adds an option') do
     extend Magni::Base::ClassMethods
   end
   klass.option('foo', type: :boolean)
-  assert_true(klass.options.any? { |opt| opt.name == 'foo' && opt.type == :boolean })
+  assert_true(klass.options.any? { |opt| opt.name == :foo && opt.type == :boolean })
 end
 
 assert('Magni::Base::ClassMethods.class_option adds a class option') do
@@ -23,7 +23,7 @@ assert('Magni::Base::ClassMethods.class_option adds a class option') do
     extend Magni::Base::ClassMethods
   end
   klass.class_option('bar', type: :numeric)
-  assert_true(klass.class_options.any? { |opt| opt.name == 'bar' && opt.type == :numeric })
+  assert_true(klass.class_options.any? { |opt| opt.name == :bar && opt.type == :numeric })
 end
 
 assert('Magni::Base::ClassMethods.default_command sets and gets default command') do

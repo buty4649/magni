@@ -89,8 +89,8 @@ assert('Magni::OptionParser sets default values correctly') do
 
   Magni::OptionParser.new(command, specs, klass)
 
-  assert_equal 42, klass.options['count']
-  assert_equal 'default_name', klass.options['name']
+  assert_equal 42, klass.options[:count]
+  assert_equal 'default_name', klass.options[:name]
 end
 
 assert('Magni::OptionParser#help returns help text') do

@@ -10,7 +10,7 @@ assert('Magni::Option#initialize and attributes') do
                             enum: %w[a b],
                             repeatable: true
                           })
-  assert_equal 'foo', opt.name
+  assert_equal :foo, opt.name
   assert_equal %w[f bar], opt.aliases
   assert_equal 42, opt.default
   assert_equal 'desc', opt.desc
@@ -24,7 +24,7 @@ end
 
 assert('Magni::Option#initialize with defaults') do
   opt = Magni::Option.new(:bar)
-  assert_equal 'bar', opt.name
+  assert_equal :bar, opt.name
   assert_equal [], opt.aliases
   assert_nil opt.default
   assert_nil opt.desc
@@ -41,7 +41,7 @@ end
 
 assert('Magni::Option.build') do
   opt = Magni::Option.build(:baz, { type: :boolean })
-  assert_equal 'baz', opt.name
+  assert_equal :baz, opt.name
   assert_equal :boolean, opt.type
 end
 
@@ -137,7 +137,7 @@ end
 
 assert('Magni::Option.build with valid options') do
   opt = Magni::Option.build(:test, type: :string, desc: 'test option')
-  assert_equal 'test', opt.name
+  assert_equal :test, opt.name
   assert_equal :string, opt.type
   assert_equal 'test option', opt.desc
 end
@@ -167,7 +167,7 @@ assert('Magni::Option.build accepts all valid attributes') do
                               repeatable: false
                             })
 
-  assert_equal 'test', opt.name
+  assert_equal :test, opt.name
   assert_equal ['t'], opt.aliases
   assert_equal 'BANNER', opt.banner
   assert_equal 'default_val', opt.default
@@ -181,14 +181,14 @@ end
 
 assert('Magni::Option.new accepts string as name') do
   opt = Magni::Option.new('debug', type: :boolean, desc: 'enable debug mode')
-  assert_equal 'debug', opt.name
+  assert_equal :debug, opt.name
   assert_equal :boolean, opt.type
   assert_equal 'enable debug mode', opt.desc
 end
 
 assert('Magni::Option.build accepts string as name') do
   opt = Magni::Option.build('input', type: :string, banner: 'PATH')
-  assert_equal 'input', opt.name
+  assert_equal :input, opt.name
   assert_equal :string, opt.type
   assert_equal 'PATH', opt.banner
 end

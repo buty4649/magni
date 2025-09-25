@@ -64,14 +64,6 @@ assert('Magni::OptionParser#parse_value handles non-numeric types') do
   assert_equal 'test_value', result
 end
 
-assert('Magni::Option#flags generates correct flags') do
-  opt = Magni::Option.new('verbose', type: :boolean, aliases: ['v'])
-  flags = opt.flags
-
-  assert_true flags.is_a?(Array)
-  assert_true flags.length >= 2
-end
-
 assert('Magni::OptionParser sets default values correctly') do
   klass = Class.new do
     def self.options

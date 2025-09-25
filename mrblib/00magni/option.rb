@@ -13,7 +13,7 @@ class Magni
       @desc = options[:desc]
       @display_name = options[:display_name]
       @required = options[:required]
-      @banner = options[:banner] || @type.to_s unless %i[boolean flag].include?(type)
+      @banner = options[:banner] || (@type.to_s unless %i[boolean flag].include?(type))
       @enum = [options[:enum]].flatten.compact
       @repeatable = options[:repeatable]
 
@@ -22,6 +22,7 @@ class Magni
 
     def validate
       raise OptionTypeInvalidError, name unless VALID_TYPES.include?(type)
+      raise OptionAttributeInvalidError.new(name, 'banner') if %i[boolean flag].include?(type) && banner
     end
 
     def self.build(name, options = {})

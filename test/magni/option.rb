@@ -135,6 +135,30 @@ assert('Magni::Option#validate raises on invalid type') do
   assert_true err
 end
 
+assert('Magni::Option#validate raises when banner is specified for boolean type') do
+  assert_raise(Magni::OptionAttributeInvalidError) do
+    Magni::Option.new(:debug, type: :boolean, banner: 'DEBUG')
+  end
+end
+
+assert('Magni::Option#validate raises when banner is specified for flag type') do
+  assert_raise(Magni::OptionAttributeInvalidError) do
+    Magni::Option.new(:help, type: :flag, banner: 'HELP')
+  end
+end
+
+assert('Magni::Option#validate allows banner for string type') do
+  opt = Magni::Option.new(:name, type: :string, banner: 'NAME')
+  assert_equal :name, opt.name
+  assert_equal 'NAME', opt.banner
+end
+
+assert('Magni::Option#validate allows banner for numeric type') do
+  opt = Magni::Option.new(:port, type: :numeric, banner: 'PORT')
+  assert_equal :port, opt.name
+  assert_equal 'PORT', opt.banner
+end
+
 assert('Magni::Option.build with valid options') do
   opt = Magni::Option.build(:test, type: :string, desc: 'test option')
   assert_equal :test, opt.name

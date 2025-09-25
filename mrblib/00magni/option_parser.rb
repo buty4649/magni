@@ -46,9 +46,9 @@ class Magni
 
     def parse_value(opt, value)
       if opt.type == :numeric
-        parse_numeric_string(value)
+        value.nil? ? 0 : parse_numeric_string(value)
       else
-        value
+        value || ''
       end
     end
 

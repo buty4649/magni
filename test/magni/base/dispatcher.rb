@@ -96,3 +96,11 @@ assert('Magni::Base::Dispatcher#invoke_command calls klass.invoke_command') do
   result = obj.invoke_command(:foo, [1, 2], klass)
   assert_equal [:foo, [1, 2]], result
 end
+
+assert('Magni::Base::ClassMethods.show_help_on_failure? returns true') do
+  klass = Class.new do
+    include Magni::Base::Dispatcher
+  end
+  obj = klass.new
+  assert_true obj.show_help_on_failure?
+end

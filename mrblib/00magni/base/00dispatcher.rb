@@ -26,12 +26,16 @@ class Magni
       rescue Magni::Error, ::OptionParser::ParseError => e
         $stderr.puts "Error: #{e.message}"
 
-        if klass.show_help_on_failure?
+        if show_help_on_failure?
           $stderr.puts
           klass.help(command, exit_after_help: false)
         end
 
         exit 1
+      end
+
+      def show_help_on_failure?
+        true
       end
 
       def invoke_command(command, argv, klass = Magni.current)

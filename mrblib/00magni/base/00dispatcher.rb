@@ -23,8 +23,8 @@ class Magni
         argv = command.parser.parse(argv)
 
         invoke_command(command, argv, klass)
-      rescue Magni::Error => e
-        $stderr.puts e.message
+      rescue Magni::Error, ::OptionParser::ParseError => e
+        $stderr.puts "Error: #{e.message}"
 
         if klass.show_help_on_failure?
           $stderr.puts

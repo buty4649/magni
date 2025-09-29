@@ -19,49 +19,60 @@ assert('Magni::OptionParser#initialize sets up parser correctly') do
   assert_true parser.is_a?(Magni::OptionParser)
 end
 
-assert('Magni::OptionParser#parse_numeric_string handles integers') do
+assert('Magni::OptionParser#parse_numeric_string') do
   command = Struct.new(:name).new('test')
   parser = Magni::OptionParser.new(command, [], Class.new)
 
-  result = parser.parse_numeric_string('42')
-  assert_equal 42, result
-  assert_true result.is_a?(Integer)
-end
+  assert('handles integers') do
+    result = parser.parse_numeric_string('42')
+    assert_equal 42, result
+    assert_true result.is_a?(Integer)
+  end
 
-assert('Magni::OptionParser#parse_numeric_string handles floats') do
-  command = Struct.new(:name).new('test')
-  parser = Magni::OptionParser.new(command, [], Class.new)
+  assert('handles floats') do
+    result = parser.parse_numeric_string('3.14')
+    assert_equal 3.14, result
+    assert_true result.is_a?(Float)
+  end
 
-  result = parser.parse_numeric_string('3.14')
-  assert_equal 3.14, result
-  assert_true result.is_a?(Float)
-end
-
-assert('Magni::OptionParser#parse_numeric_string raises InvalidFormatError for invalid input') do
-  command = Struct.new(:name).new('test')
-  parser = Magni::OptionParser.new(command, [], Class.new)
-
-  assert_raise(Magni::InvalidFormatError) do
-    parser.parse_numeric_string('not_a_number')
+  assert('raises InvalidFormatError for invalid input') do
+    assert_raise(Magni::InvalidFormatError) do
+      parser.parse_numeric_string('not_a_number')
+    end
   end
 end
 
-assert('Magni::OptionParser#parse_value handles numeric types') do
+assert('Magni::OptionParser#parse_value') do
   command = Struct.new(:name).new('test')
   parser = Magni::OptionParser.new(command, [], Class.new)
 
-  opt = Magni::Option.new('count', type: :numeric)
-  result = parser.parse_value(opt, '123')
-  assert_equal 123, result
-end
+  assert('handles numeric types') do
+    opt = Magni::Option.new('count', type: :numeric)
+    result = parser.parse_value(opt, '123')
+    assert_equal 123, result
+  end
 
-assert('Magni::OptionParser#parse_value handles non-numeric types') do
-  command = Struct.new(:name).new('test')
-  parser = Magni::OptionParser.new(command, [], Class.new)
+  assert('handles non-numeric types') do
+    opt = Magni::Option.new('name', type: :string)
+    result = parser.parse_value(opt, 'test_value')
+    assert_equal 'test_value', result
+  end
 
-  opt = Magni::Option.new('name', type: :string)
-  result = parser.parse_value(opt, 'test_value')
-  assert_equal 'test_value', result
+  assert('handles boolean types') do
+    opt = Magni::Option.new('verbose', type: :boolean)
+
+    result_true = parser.parse_value(opt, true)
+    assert_equal true, result_true
+
+    result_false = parser.parse_value(opt, false)
+    assert_equal false, result_false
+  end
+
+  assert('handles flag types') do
+    opt = Magni::Option.new('help', type: :flag)
+    result = parser.parse_value(opt, true)
+    assert_equal true, result
+  end
 end
 
 assert('Magni::OptionParser sets default values correctly') do

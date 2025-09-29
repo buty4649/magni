@@ -57,6 +57,22 @@ assert('Magni::OptionParser#parse_value') do
     result = parser.parse_value(opt, 'test_value')
     assert_equal 'test_value', result
   end
+
+  assert('handles boolean types') do
+    opt = Magni::Option.new('verbose', type: :boolean)
+
+    result_true = parser.parse_value(opt, true)
+    assert_equal true, result_true
+
+    result_false = parser.parse_value(opt, false)
+    assert_equal false, result_false
+  end
+
+  assert('handles flag types') do
+    opt = Magni::Option.new('help', type: :flag)
+    result = parser.parse_value(opt, true)
+    assert_equal true, result
+  end
 end
 
 assert('Magni::OptionParser sets default values correctly') do

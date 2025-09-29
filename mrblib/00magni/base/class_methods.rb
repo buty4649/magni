@@ -74,7 +74,7 @@ class Magni
       end
 
       def help_text
-        text = usage
+        text = formatted_usage
 
         if using_default? || current_command.name == :help
           text << "\nCommands:\n"
@@ -90,19 +90,19 @@ class Magni
         text
       end
 
-      def usage
+      def formatted_usage
         return '' unless package_name
 
-        usage = "Usage:\n"
-        usage << "  #{package_name}"
+        command = (current_command.usage unless using_default? || current_command.name == :help)
+        usage_text = usage(package_name, command).split("\n").map { |line| "  #{line}" }.join("\n")
+        <<~USAGE
+          Usage:
+          #{usage_text}
+        USAGE
+      end
 
-        if using_default? || current_command.name == :help
-          usage << ' [command]'
-        elsif current_command.usage
-          usage << " #{current_command.usage}"
-        end
-
-        "#{usage}\n"
+      def usage(name, command)
+        [name, command || '[command]'].join(' ')
       end
 
       def start(argv = ARGV)

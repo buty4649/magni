@@ -59,3 +59,4 @@ build-iPhoneSimulator/
 /example/build
 /example/mruby
 /example/magni-example
+**/build_config.rb.lock

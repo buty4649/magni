@@ -79,11 +79,3 @@ assert('Magni::Base::Methods#help') do
     end
   end
 end
-
-assert('Magni::Base::Methods#show_help_on_failure? returns true') do
-  klass = Class.new do
-    include Magni::Base::Methods
-  end
-  obj = klass.new
-  assert_true obj.show_help_on_failure?
-end

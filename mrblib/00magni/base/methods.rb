@@ -19,10 +19,6 @@ class Magni
 
         exit if exit_after_help
       end
-
-      def show_help_on_failure?
-        true
-      end
     end
   end
 end

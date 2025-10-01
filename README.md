@@ -48,7 +48,7 @@ MRuby::Build.new do |conf|
   conf.toolchain
   conf.gembox 'default'
   conf.gem github: 'buty4649/magni', branch: 'main'
-  conf.build_dir File.join(__dir__, 'build')
+  conf.build_dir = File.join(__dir__, 'build')
 end
 ```
 

@@ -64,7 +64,7 @@ assert('Magni::Base::ClassMethods.help_text includes usage and commands') do
     def self.package_name = 'magni-test'
 
     def self.commands
-      { foo: Magni::Command.new(:foo, 'foo usage', 'foo desc', []), help: Magni::Command.new(:help, 'help', 'show this message', []) }
+      { foo: Magni::Command.new(:foo, 'foo usage', 'foo desc', 0, []), help: Magni::Command.new(:help, 'help', 'show this message', 99, []) }
     end
 
     def self.default_command = :foo
@@ -74,4 +74,25 @@ assert('Magni::Base::ClassMethods.help_text includes usage and commands') do
   assert_true text.include?('Usage:')
   assert_true text.include?('Commands:')
   assert_true text.include?('foo desc')
+end
+
+assert('Magni::Base::ClassMethods.ordered_commands returns commands ordered by order then name') do
+  klass = Class.new do
+    extend Magni::Base::ClassMethods
+
+    def self.commands
+      {
+        zebra: Magni::Command.new(:zebra, 'zebra usage', 'zebra desc', 1, []),
+        alpha: Magni::Command.new(:alpha, 'alpha usage', 'alpha desc', 1, []),
+        beta: Magni::Command.new(:beta, 'beta usage', 'beta desc', 0, []),
+        gamma: Magni::Command.new(:gamma, 'gamma usage', 'gamma desc', 2, [])
+      }
+    end
+  end
+
+  ordered = klass.ordered_commands
+  names = ordered.map(&:name)
+
+  # Should be ordered by order (0, 1, 2), then by name within same order
+  assert_equal %i[beta alpha zebra gamma], names
 end

@@ -25,6 +25,10 @@ class Magni
         @description = description
       end
 
+      def order(order)
+        @order = order
+      end
+
       attr_reader :options
 
       def commands
@@ -78,8 +82,9 @@ class Magni
 
         if using_default? || current_command.name == :help
           text << "\nCommands:\n"
-          commands.keys.sort.each do |name|
-            description = commands[name].description
+          ordered_commands.each do |command|
+            name = command.name
+            description = command.description
             is_default = default_command != :help && default_command?(name)
             suffix = is_default ? ' (default)' : ''
 
@@ -88,6 +93,20 @@ class Magni
         end
 
         text
+      end
+
+      def ordered_commands
+        ordered = {}
+        commands.each do |name, command|
+          ordered[command.order] ||= []
+          ordered[command.order] << name
+        end
+
+        ordered.keys.sort.map do |key|
+          ordered[key].sort.map do |name|
+            commands[name]
+          end
+        end.flatten
       end
 
       def formatted_usage
@@ -116,15 +135,17 @@ class Magni
 
         return if @no_commands || meth == :initialize || is_a?(Magni)
 
-        commands[meth] = Command.new(meth, @usage, @description, options)
+        commands[meth] = Command.new(meth, @usage, @description, @order, options)
 
         @usage = nil
         @description = nil
+        @order = 0
         @options = []
       end
 
       def help_command
-        Command.new(:help, 'help', 'show this message', nil)
+        order = 99
+        Command.new(:help, 'help', 'show this message', order, [])
       end
     end
   end

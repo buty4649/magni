@@ -1,11 +1,12 @@
 class Magni
   class Command
-    attr_reader :name, :usage, :description, :options
+    attr_reader :name, :usage, :description, :order, :options
 
-    def initialize(name, usage, description, options)
+    def initialize(name, usage, description, order, options)
       @name = name
       @usage = usage
       @description = description
+      @order = order || 0
       @options = options || []
     end
 

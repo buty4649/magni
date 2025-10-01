@@ -2,6 +2,8 @@ class Magni
   module Base
     module ClassMethods
       include Base::Dispatcher
+      include Base::MethodOptions
+      include Base::ClassOptions
 
       def inherited(subclass)
         super
@@ -20,57 +22,8 @@ class Magni
         @@current = klass # rubocop:disable Style/ClassVars
       end
 
-      def desc(usage, description)
-        @usage = usage
-        @description = description
-      end
-
-      attr_reader :options
-
       def commands
         @commands ||= { help: help_command }
-      end
-
-      def option(name, options = {})
-        @options ||= []
-        @options << Option.build(name, options)
-      end
-
-      def class_options
-        @class_options ||= []
-      end
-
-      def class_option(name, options = {})
-        class_options << Option.build(name, options)
-      end
-
-      def default_command(meth = nil)
-        if meth
-          @default_command = meth.is_a?(Symbol) ? meth : meth.to_sym
-        else
-          @default_command ||= :help
-        end
-      end
-
-      def default_command?(meth)
-        @default_command == meth
-      end
-
-      def package_name(name = nil)
-        if name
-          @package_name = name
-        else
-          @package_name
-        end
-      end
-      alias app_name package_name
-
-      def no_commands
-        return unless block_given?
-
-        @no_commands = true
-        yield
-        @no_commands = false
       end
 
       def help_text
@@ -78,8 +31,9 @@ class Magni
 
         if using_default? || current_command.name == :help
           text << "\nCommands:\n"
-          commands.keys.sort.each do |name|
-            description = commands[name].description
+          ordered_commands.each do |command|
+            name = command.name
+            description = command.description
             is_default = default_command != :help && default_command?(name)
             suffix = is_default ? ' (default)' : ''
 
@@ -88,6 +42,20 @@ class Magni
         end
 
         text
+      end
+
+      def ordered_commands
+        ordered = {}
+        commands.each do |name, command|
+          ordered[command.order] ||= []
+          ordered[command.order] << name
+        end
+
+        ordered.keys.sort.map do |key|
+          ordered[key].sort.map do |name|
+            commands[name]
+          end
+        end.flatten
       end
 
       def formatted_usage
@@ -116,15 +84,17 @@ class Magni
 
         return if @no_commands || meth == :initialize || is_a?(Magni)
 
-        commands[meth] = Command.new(meth, @usage, @description, options)
+        commands[meth] = Command.new(meth, @usage, @description, @order, options)
 
         @usage = nil
         @description = nil
+        @order = 0
         @options = []
       end
 
       def help_command
-        Command.new(:help, 'help', 'show this message', nil)
+        order = 99
+        Command.new(:help, 'help', 'show this message', order, [])
       end
     end
   end

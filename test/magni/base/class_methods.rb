@@ -1,31 +1,3 @@
-assert('Magni::Base::ClassMethods.class_option adds a class option') do
-  klass = Class.new do
-    extend Magni::Base::ClassMethods
-  end
-  klass.class_option('bar', type: :numeric)
-  assert_true(klass.class_options.any? { |opt| opt.name == :bar && opt.type == :numeric })
-end
-
-assert('Magni::Base::ClassMethods.default_command sets and gets default command') do
-  klass = Class.new do
-    extend Magni::Base::ClassMethods
-
-    def self.default_command_val = @default_command
-  end
-  klass.default_command(:foo)
-  assert_equal :foo, klass.default_command_val
-  assert_true klass.default_command?(:foo)
-  assert_false klass.default_command?(:bar)
-end
-
-assert('Magni::Base::ClassMethods.package_name sets and gets package name') do
-  klass = Class.new do
-    extend Magni::Base::ClassMethods
-  end
-  klass.package_name('magni-test')
-  assert_equal 'magni-test', klass.package_name
-end
-
 assert('Magni::Base::ClassMethods.commands returns help command by default') do
   klass = Class.new do
     extend Magni::Base::ClassMethods

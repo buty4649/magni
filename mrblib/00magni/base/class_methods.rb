@@ -3,6 +3,7 @@ class Magni
     module ClassMethods
       include Base::Dispatcher
       include Base::MethodOptions
+      include Base::ClassOptions
 
       def inherited(subclass)
         super
@@ -23,43 +24,6 @@ class Magni
 
       def commands
         @commands ||= { help: help_command }
-      end
-
-      def class_options
-        @class_options ||= []
-      end
-
-      def class_option(name, options = {})
-        class_options << Option.build(name, options)
-      end
-
-      def default_command(meth = nil)
-        if meth
-          @default_command = meth.is_a?(Symbol) ? meth : meth.to_sym
-        else
-          @default_command ||= :help
-        end
-      end
-
-      def default_command?(meth)
-        @default_command == meth
-      end
-
-      def package_name(name = nil)
-        if name
-          @package_name = name
-        else
-          @package_name
-        end
-      end
-      alias app_name package_name
-
-      def no_commands
-        return unless block_given?
-
-        @no_commands = true
-        yield
-        @no_commands = false
       end
 
       def help_text

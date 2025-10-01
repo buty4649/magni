@@ -2,6 +2,7 @@ class Magni
   module Base
     module ClassMethods
       include Base::Dispatcher
+      include Base::MethodOptions
 
       def inherited(subclass)
         super
@@ -20,24 +21,8 @@ class Magni
         @@current = klass # rubocop:disable Style/ClassVars
       end
 
-      def desc(usage, description)
-        @usage = usage
-        @description = description
-      end
-
-      def order(order)
-        @order = order
-      end
-
-      attr_reader :options
-
       def commands
         @commands ||= { help: help_command }
-      end
-
-      def option(name, options = {})
-        @options ||= []
-        @options << Option.build(name, options)
       end
 
       def class_options

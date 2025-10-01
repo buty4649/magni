@@ -1,23 +1,3 @@
-assert('Magni::Base::ClassMethods.desc sets usage and description') do
-  klass = Class.new do
-    extend Magni::Base::ClassMethods
-
-    def self.usage_val = @usage
-    def self.description_val = @description
-  end
-  klass.desc('USAGE', 'DESCRIPTION')
-  assert_equal 'USAGE', klass.usage_val
-  assert_equal 'DESCRIPTION', klass.description_val
-end
-
-assert('Magni::Base::ClassMethods.option adds an option') do
-  klass = Class.new do
-    extend Magni::Base::ClassMethods
-  end
-  klass.option('foo', type: :boolean)
-  assert_true(klass.options.any? { |opt| opt.name == :foo && opt.type == :boolean })
-end
-
 assert('Magni::Base::ClassMethods.class_option adds a class option') do
   klass = Class.new do
     extend Magni::Base::ClassMethods

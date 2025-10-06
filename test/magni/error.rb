@@ -16,6 +16,12 @@ assert('Magni::CommandNotFoundError initializes with correct message') do
   assert_true err.is_a?(Magni::Error)
 end
 
+assert('Magni::AmbiguousCommandError initializes with correct message') do
+  err = Magni::AmbiguousCommandError.new('ex', %w[execute exit])
+  assert_equal "Ambiguous command 'ex': execute, exit", err.message
+  assert_true err.is_a?(Magni::Error)
+end
+
 assert('Magni::CommandArgumentError initializes with correct message') do
   command = Struct.new(:name).new('build')
   err = Magni::CommandArgumentError.new(command, 'missing target')
@@ -58,6 +64,7 @@ assert('All error classes inherit from Magni::Error') do
   errors = [
     Magni::RequiredOptionError.new('test'),
     Magni::CommandNotFoundError.new('test'),
+    Magni::AmbiguousCommandError.new('test', %w[cmd1 cmd2]),
     Magni::CommandArgumentError.new(Struct.new(:name).new('test'), 'msg'),
     Magni::OptionTypeInvalidError.new('test'),
     Magni::InvalidFormatError.new,

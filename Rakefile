@@ -23,6 +23,9 @@ else
     else
       puts 'Cloning mruby...'
       system("git clone https://github.com/mruby/mruby.git #{mruby_dir}")
+      Dir.chdir(mruby_dir) do
+        system("git checkout #{mruby_version}")
+      end
     end
     raise 'Failed to clone mruby' unless File.exist?(File.join(mruby_dir, 'Rakefile'))
 

@@ -1,0 +1,14 @@
+ENV['MRUBY_CONFIG'] = File.join(__dir__, 'build_config.rb')
+
+load File.join(__dir__, '..', '..', 'Rakefile')
+
+task default: 'copy:binary'
+
+desc 'copy binary to current directory'
+task 'copy:binary' => :all do
+  bindir = File.join(ENV.fetch('MRUBY_BUILD_DIR', nil), 'bin')
+  binary_name = 'mytool'
+  Dir[File.join(bindir, "*#{binary_name}*")].each do |file|
+    FileUtils.cp(file, '.', verbose: true)
+  end
+end

@@ -56,7 +56,11 @@ build-iPhoneSimulator/
 # .rubocop-https?--*
 
 /mruby
-/example/build
-/example/mruby
-/example/magni-example
+/example/*/basic
+/example/*/class_option
+/example/*/custom_usage
+/example/*/default_command
+/example/*/method_option
+/example/*/mytool
+/example/*/show_help_on_failure
 **/build_config.rb.lock

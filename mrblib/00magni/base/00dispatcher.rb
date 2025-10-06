@@ -45,10 +45,35 @@ class Magni
       def select_command(argv, klass)
         return [nil, argv] if argv.first&.start_with?('-')
 
-        command = klass.commands[argv.first&.to_sym]
-        return [nil, argv] unless command
+        input = argv.first&.to_s
+        return [nil, argv] unless input
 
-        [command, argv[1..]]
+        # Try exact match first
+        command = klass.commands[input.to_sym]
+        return [command, argv[1..]] if command
+
+        # Try abbreviation match
+        command = find_command_by_abbreviation(input, klass.commands)
+        return [command, argv[1..]] if command
+
+        [nil, argv]
+      end
+
+      private
+
+      def find_command_by_abbreviation(input, commands)
+        # Find all commands that start with the input
+        matches = commands.keys.select { |cmd| cmd.to_s.start_with?(input) }
+
+        case matches.size
+        when 0
+          nil
+        when 1
+          commands[matches.first]
+        else
+          # Multiple matches found - this is ambiguous
+          raise Magni::AmbiguousCommandError.new(input, matches)
+        end
       end
 
       def fallback_default_command(klass)

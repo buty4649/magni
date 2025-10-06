@@ -13,6 +13,12 @@ class Magni
     end
   end
 
+  class AmbiguousCommandError < Error
+    def initialize(input, matches)
+      super("Ambiguous command '#{input}': #{matches.join(', ')}")
+    end
+  end
+
   class CommandArgumentError < Error
     def initialize(command, message)
       super("#{command.name}: #{message}")

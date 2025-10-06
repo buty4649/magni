@@ -1,0 +1,30 @@
+name: Dependabot auto-merge
+on: pull_request
+
+permissions:
+  checks: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@08eff52bf64351f401fb50d4972fa95b9f2c2d1b # v2.4.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Wait for status checks
+        uses: lewagon/wait-on-check-action@3603e826ee561ea102b58accb5ea55a1a7482343 # v1.4.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          check-regexp: (lint|build|test).*
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'}}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

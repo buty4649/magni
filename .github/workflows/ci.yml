@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mruby_version: ['3.4.0', 'master']
+        # TODO: Temporarily using commit 437b47d instead of 'master' due to bug
+        # See: https://github.com/mruby/mruby/issues/6636
+        # Revert to 'master' once the issue is fixed
+        mruby_version: ['3.4.0', '437b47d']
 
     steps:
     - uses: actions/checkout@v5

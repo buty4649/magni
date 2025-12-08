@@ -9,8 +9,6 @@ updates:
       time: "09:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
-    assignees:
-      - "buty4649"
     commit-message:
       prefix: "deps"
       include: "scope"
@@ -24,8 +22,6 @@ updates:
       time: "09:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 3
-    assignees:
-      - "buty4649"
     commit-message:
       prefix: "ci"
       include: "scope"

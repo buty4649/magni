@@ -16,7 +16,11 @@ assert('Magni::Base::ClassMethods.help_text includes usage and commands') do
     def self.package_name = 'magni-test'
 
     def self.commands
-      { foo: Magni::Command.new(:foo, 'foo usage', 'foo desc', 0, []), help: Magni::Command.new(:help, 'help', 'show this message', 99, []) }
+      {
+        foo: Magni::Command.new({ name: :foo, usage: 'foo usage', description: 'foo desc', order: 0, options: [] }),
+        help: Magni::Command.new({ name: :help, usage: 'help', description: 'show this message', order: 99,
+                                   options: [] })
+      }
     end
 
     def self.default_command = :foo
@@ -34,10 +38,13 @@ assert('Magni::Base::ClassMethods.ordered_commands returns commands ordered by o
 
     def self.commands
       {
-        zebra: Magni::Command.new(:zebra, 'zebra usage', 'zebra desc', 1, []),
-        alpha: Magni::Command.new(:alpha, 'alpha usage', 'alpha desc', 1, []),
-        beta: Magni::Command.new(:beta, 'beta usage', 'beta desc', 0, []),
-        gamma: Magni::Command.new(:gamma, 'gamma usage', 'gamma desc', 2, [])
+        zebra: Magni::Command.new({ name: :zebra, usage: 'zebra usage', description: 'zebra desc', order: 1,
+                                    options: [] }),
+        alpha: Magni::Command.new({ name: :alpha, usage: 'alpha usage', description: 'alpha desc', order: 1,
+                                    options: [] }),
+        beta: Magni::Command.new({ name: :beta, usage: 'beta usage', description: 'beta desc', order: 0, options: [] }),
+        gamma: Magni::Command.new({ name: :gamma, usage: 'gamma usage', description: 'gamma desc', order: 2,
+                                    options: [] })
       }
     end
   end

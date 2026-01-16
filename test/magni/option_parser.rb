@@ -1,5 +1,5 @@
 assert('Magni::OptionParser#initialize sets up parser correctly') do
-  command = Struct.new(:name).new('test_command')
+  command = Struct.new(:name, :exclude_options).new('test_command', nil)
   specs = [
     Magni::Option.new('verbose', type: :boolean, aliases: ['v'], desc: 'verbose output'),
     Magni::Option.new('count', type: :numeric, default: 1, desc: 'count number')
@@ -20,7 +20,7 @@ assert('Magni::OptionParser#initialize sets up parser correctly') do
 end
 
 assert('Magni::OptionParser#parse_numeric_string') do
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
   parser = Magni::OptionParser.new(command, [], Class.new)
 
   assert('handles integers') do
@@ -43,7 +43,7 @@ assert('Magni::OptionParser#parse_numeric_string') do
 end
 
 assert('Magni::OptionParser#parse_value') do
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
   parser = Magni::OptionParser.new(command, [], Class.new)
 
   assert('handles numeric types') do
@@ -84,7 +84,7 @@ assert('Magni::OptionParser sets default values correctly') do
     def self.help(command); end
   end
 
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
   specs = [
     Magni::Option.new('count', type: :numeric, default: 42),
     Magni::Option.new('name', type: :string, default: 'default_name')
@@ -97,7 +97,7 @@ assert('Magni::OptionParser sets default values correctly') do
 end
 
 assert('Magni::OptionParser#help returns help text') do
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
   specs = [
     Magni::Option.new('verbose', type: :boolean, aliases: ['v'], desc: 'verbose output')
   ]
@@ -126,7 +126,7 @@ assert('Magni::OptionParser handles parse with validation') do
     def self.help(command); end
   end
 
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
   specs = [
     Magni::Option.new('name', type: :string)
   ]
@@ -146,7 +146,7 @@ assert('Magni::OptionParser handles optional argument with bracket suffix') do
     def self.help(command); end
   end
 
-  command = Struct.new(:name).new('test')
+  command = Struct.new(:name, :exclude_options).new('test', nil)
 
   # Test with optional string argument provided
   assert('Test with optional string argument provided') do

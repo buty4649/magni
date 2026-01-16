@@ -44,4 +44,10 @@ class Magni
       super("#{opt} must be one of: #{enum.join(', ')}")
     end
   end
+
+  class ExcludeOptionsError < Error
+    def initialize(opts)
+      super("Cannot specify these options together: #{opts.join(', ')}")
+    end
+  end
 end

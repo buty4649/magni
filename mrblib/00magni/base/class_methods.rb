@@ -84,17 +84,32 @@ class Magni
 
         return if @no_commands || meth == :initialize || is_a?(Magni)
 
-        commands[meth] = Command.new(meth, @usage, @description, @order, options)
+        cmd = {
+          name: meth,
+          usage: @usage,
+          description: @description,
+          order: @order,
+          options:,
+          exclude_options: @exclude_options
+        }
+        commands[meth] = Command.new(cmd)
 
         @usage = nil
         @description = nil
         @order = 0
         @options = []
+        @exclude_options = []
       end
 
       def help_command
         order = 99
-        Command.new(:help, 'help', 'show this message', order, [])
+        Command.new({
+                      name: :help,
+                      usage: 'help',
+                      description: 'show this message',
+                      order: order,
+                      options: []
+                    })
       end
     end
   end

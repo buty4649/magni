@@ -1,16 +1,22 @@
 class Magni
   class OptionValidator
-    def initialize(klass, specs)
+    # Initialize the option validator
+    # @param klass [Magni] Command class instance that holds options hash for validation
+    # @param specs [Array<Magni::Option>] Array of option specifications with validation rules
+    # @param exclude_options [Array<Array<Symbol>>]
+    def initialize(klass, specs, exclude_options)
       @klass = klass
       @specs = specs
+      @exclude_options = exclude_options
     end
 
-    def validate
-      validate_required?
-      validate_enum
+    def valid?
+      valid_required?
+      valid_enums?
+      valid_exclude_options?
     end
 
-    def validate_required?
+    def valid_required?
       required.each do |opt|
         raise RequiredOptionError, opt.flag(suffix: false) unless @klass.options[opt.name]
       end
@@ -22,7 +28,7 @@ class Magni
       @specs.select(&:required)
     end
 
-    def validate_enum
+    def valid_enums?
       invalid = enums.find do |opt|
         if opt.repeatable
           @klass.options[opt.name]&.any? { |v| !opt.enum.include?(v) }
@@ -38,6 +44,18 @@ class Magni
 
     def enums
       @specs.select { |s| s.enum.any? }
+    end
+
+    def valid_exclude_options?
+      @exclude_options&.each do |excludes|
+        opts = excludes.select { |e| @klass.options.key?(e) }
+        if opts.size > 1
+          flags = opts.map { |e| @specs.find { |s| s.name == e }.flag(suffix: false) }
+          raise ExcludeOptionsError, flags
+        end
+      end
+
+      true
     end
   end
 end

@@ -3,7 +3,7 @@ class Magni
     def initialize(command, specs, klass)
       @parser = ::OptionParser.new
       @specs = specs
-      @validator = OptionValidator.new(klass, @specs)
+      @validator = OptionValidator.new(klass, @specs, command.exclude_options)
 
       @specs.each do |spec|
         build(spec, klass)
@@ -39,7 +39,7 @@ class Magni
     def parse(argv)
       argv = @parser.parse(argv)
 
-      @validator.validate
+      @validator.valid?
 
       argv
     end

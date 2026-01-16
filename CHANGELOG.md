@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.4.0](https://github.com/buty4649/magni/compare/v1.3.1...v1.4.0) - 2026-01-16
+- ci(deps): bump Songmu/tagpr from 1.10.0 to 1.11.0 by @dependabot[bot] in https://github.com/buty4649/magni/pull/39
+- ci(deps): bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/buty4649/magni/pull/40
+- feat: add exclude_options for mutually exclusive command options by @buty4649 in https://github.com/buty4649/magni/pull/41
+
 ## [v1.3.1](https://github.com/buty4649/magni/compare/v1.3.0...v1.3.1) - 2025-12-08
 - deps(deps): bump rubocop from 1.81.1 to 1.81.6 by @dependabot[bot] in https://github.com/buty4649/magni/pull/26
 - deps(deps): bump rubocop from 1.81.6 to 1.81.7 by @dependabot[bot] in https://github.com/buty4649/magni/pull/28

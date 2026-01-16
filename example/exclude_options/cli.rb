@@ -16,7 +16,7 @@ class Cli < Magni
     elsif options[:update]
       puts "Updating file: #{options[:file]}"
     else
-      puts "Please specify one of: --create, --delete, or --update"
+      puts 'Please specify one of: --create, --delete, or --update'
       exit 1
     end
   end
@@ -33,13 +33,13 @@ class Cli < Magni
            elsif options[:write]
              'writing'
            else
-             puts "Please specify either --read or --write mode"
+             puts 'Please specify either --read or --write mode'
              exit 1
            end
 
     file = options[:file] || 'default.txt'
     message = "Accessing #{file} in #{mode} mode"
-    message += " (verbose)" if options[:verbose]
+    message += ' (verbose)' if options[:verbose]
     puts message
   end
 
@@ -60,7 +60,7 @@ class Cli < Magni
              elsif options[:restart]
                'restarting'
              else
-               puts "Please specify an action: --start, --stop, or --restart"
+               puts 'Please specify an action: --start, --stop, or --restart'
                exit 1
              end
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.4.1](https://github.com/buty4649/magni/compare/v1.4.0...v1.4.1) - 2026-01-26
+- ci(deps): bump Songmu/tagpr from 1.11.0 to 1.11.1 by @dependabot[bot] in https://github.com/buty4649/magni/pull/43
+- ci(deps): bump Songmu/tagpr from 1.11.1 to 1.12.1 by @dependabot[bot] in https://github.com/buty4649/magni/pull/44
+- ci(deps): bump actions/checkout from 6.0.1 to 6.0.2 by @dependabot[bot] in https://github.com/buty4649/magni/pull/45
+
 ## [v1.4.0](https://github.com/buty4649/magni/compare/v1.3.1...v1.4.0) - 2026-01-16
 - ci(deps): bump Songmu/tagpr from 1.10.0 to 1.11.0 by @dependabot[bot] in https://github.com/buty4649/magni/pull/39
 - ci(deps): bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/buty4649/magni/pull/40

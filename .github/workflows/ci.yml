@@ -11,7 +11,7 @@ jobs:
         mruby_version: ['3.4.0', 'master']
 
     steps:
-    - uses: actions/checkout@v6.0.1
+    - uses: actions/checkout@v6.0.2
       with:
         submodules: recursive
 
